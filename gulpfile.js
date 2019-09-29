@@ -1,45 +1,43 @@
-const browserify = require('browserify')
-const gulp = require('gulp')
-const gutil = require('gulp-util')
-const rename = require('gulp-rename')
-const source = require('vinyl-source-stream')
-const tap = require('gulp-tap')
+var browserify = require('browserify')
+var gulp = require('gulp')
+var rename = require('gulp-rename')
+var source = require('vinyl-source-stream')
+var tap = require('gulp-tap')
 
 // 共通の JS モジュール
-const commonModules = ['js-cookie', 'underscore']
+var commonModules = ['js-cookie', 'underscore']
 
-const commonJs = () => {
-  const bundler = browserify('src/assets/javascripts/common.js')
-  commonModules.forEach(lib => {
+var commonJs = function() {
+  var bundler = browserify('src/assets/javascripts/common.js')
+  commonModules.forEach(function(lib) {
     bundler.require(lib)
   })
   return bundler
     .bundle()
-    .on('error', err => gutil.log('Browserify Error', err))
     .pipe(source('common.bundle.js'))
     .pipe(gulp.dest('htdocs/assets/javascripts'))
 }
 
-const pageJs = () => {
+var pageJs = function() {
   return gulp
     .src('src/assets/javascripts/pages/*.js', { read: false })
     .pipe(
-      tap(file => {
-        const bundler = browserify(file.path)
-        commonModules.forEach(lib => {
+      tap(function(file) {
+        var bundler = browserify(file.path)
+        commonModules.forEach(function(lib) {
           bundler.exclude(lib)
         })
         file.contents = bundler.bundle()
       })
     )
     .pipe(
-      rename(path => {
+      rename(function(path) {
         path.extname = '.bundle.js'
       })
     )
     .pipe(gulp.dest('htdocs/assets/javascripts/pages'))
 }
 
-const jsTasks = gulp.parallel(commonJs, pageJs)
+var jsTasks = gulp.parallel(commonJs, pageJs)
 
 gulp.task('build', gulp.series(jsTasks))

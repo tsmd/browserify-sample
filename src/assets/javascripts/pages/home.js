@@ -1,6 +1,6 @@
 var _ = require('underscore')
 
-const $body = $('body')
+var $body = $('body')
 $body.append('<p>home.js!</p>')
 
 if (_) {

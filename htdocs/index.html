@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
+  <link rel="stylesheet" href="assets/stylesheets/main.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
   <script src="assets/javascripts/common.bundle.js" defer></script>
   <script src="assets/javascripts/pages/home.bundle.js" defer></script>
 </head>
 <body>
 
-<h1>Home Page</h1>
+<header>
+  <h1>Home Page</h1>
+  <div class="HeaderSearch">
+    <button class="HeaderSearch__toggle" type="button">
+      <span class="HeaderSearch__searchIcon">🔍</span>
+      <span class="HeaderSearch__closeIcon">❌</span>
+    </button>
+    <form class="HeaderSearch__form" role="search">
+      <div class="HeaderSearch__inner">
+        <input class="HeaderSearch__input" type="text">
+        <button class="HeaderSearch__submit" type="submit">検索</button>
+      </div>
+    </form>
+  </div>
+</header>
 
 </body>
 </html>

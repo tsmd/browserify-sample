@@ -1,32 +1,32 @@
 var browserify = require('browserify')
 var gulp = require('gulp')
+var merge = require('merge-stream')
 var rename = require('gulp-rename')
 var source = require('vinyl-source-stream')
 var tap = require('gulp-tap')
 
 // 共通の JS モジュール
-var commonModules = ['js-cookie', 'underscore']
+var commonModules = [
+  'js-cookie',
+  'underscore',
+  { file: './src/assets/javascripts/common/string-utils', expose: 'string-utils' }
+]
 
-var commonJs = function() {
-  var bundler = browserify('src/assets/javascripts/common.js')
-  commonModules.forEach(function(lib) {
-    bundler.require(lib)
-  })
-  return bundler
+var js = function() {
+  var commonBundler
+  commonBundler = browserify('src/assets/javascripts/common.js')
+  commonBundler.require(commonModules)
+  var commonStream = commonBundler
     .bundle()
     .pipe(source('common.bundle.js'))
     .pipe(gulp.dest('htdocs/assets/javascripts'))
-}
 
-var pageJs = function() {
-  return gulp
+  var pageStream = gulp
     .src('src/assets/javascripts/pages/*.js', { read: false })
     .pipe(
       tap(function(file) {
         var bundler = browserify(file.path)
-        commonModules.forEach(function(lib) {
-          bundler.exclude(lib)
-        })
+        bundler.external(commonBundler)
         file.contents = bundler.bundle()
       })
     )
@@ -36,8 +36,7 @@ var pageJs = function() {
       })
     )
     .pipe(gulp.dest('htdocs/assets/javascripts/pages'))
+  return merge(commonStream, pageStream)
 }
 
-var jsTasks = gulp.parallel(commonJs, pageJs)
-
-gulp.task('build', gulp.series(jsTasks))
+gulp.task('build', gulp.series(js))

@@ -47,6 +47,7 @@ header {
   align-items: center;
   justify-content: center;
   height: 60px;
+  opacity: 0;
 }
 
 .HeaderSearch__input {

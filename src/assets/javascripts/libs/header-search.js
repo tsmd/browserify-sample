@@ -10,10 +10,20 @@ function createHeaderSearch(el) {
   bindEvents()
 
   function bindEvents() {
-    $toggleButton.on('click', function(e) {
+    $toggleButton.on('click', onClickToggleButton)
+    $form.on('keydown', onKeyDownForm)
+  }
+
+  function onClickToggleButton(e) {
+    e.preventDefault()
+    toggle()
+  }
+
+  function onKeyDownForm(e) {
+    if (opened && e.keyCode === 27 /* Escape */) {
       e.preventDefault()
-      toggle()
-    })
+      close()
+    }
   }
 
   function toggle() {
@@ -22,27 +32,27 @@ function createHeaderSearch(el) {
 
   function open() {
     opened = true
+
     $el.addClass('-opened')
-    $form.stop().slideDown(500)
+    $form.stop(true, false).slideDown(500)
     $inner
-      .stop()
+      .stop(true, false)
       .delay(200)
-      .fadeIn(700)
-    focus()
+      .animate({ opacity: 1 }, 700, function() {
+        focus()
+      })
   }
 
   function close() {
     opened = false
-    $el.removeClass('-opened')
-    $inner
-      .stop()
-      .delay(200)
-      .fadeOut(700)
-    $form
-      .stop()
-      .delay(200)
-      .slideUp(500)
+
     focusToggleButton()
+    $el.removeClass('-opened')
+    $inner.stop(true, false).animate({ opacity: 0 }, 700)
+    $form
+      .stop(true, false)
+      .delay(200)
+      .slideUp(600)
   }
 
   function focus() {

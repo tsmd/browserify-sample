@@ -1,7 +1,88 @@
 require=(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict'
 
+var createHeaderSearch = require('./libs/header-search')
+$('.HeaderSearch').each(function () {
+  createHeaderSearch(this)
+})
+
 $('body').append('<p>common.js!</p>')
+
+},{"./libs/header-search":2}],2:[function(require,module,exports){
+function createHeaderSearch(el) {
+  var $el = $(el)
+  var $toggleButton = $el.find('.HeaderSearch__toggle')
+  var $form = $el.find('.HeaderSearch__form')
+  var $inner = $el.find('.HeaderSearch__inner')
+  var $input = $el.find('.HeaderSearch__input')
+
+  var opened = false
+
+  bindEvents()
+
+  function bindEvents() {
+    $toggleButton.on('click', onClickToggleButton)
+    $form.on('keydown', onKeyDownForm)
+  }
+
+  function onClickToggleButton(e) {
+    e.preventDefault()
+    toggle()
+  }
+
+  function onKeyDownForm(e) {
+    if (opened && e.keyCode === 27 /* Escape */) {
+      e.preventDefault()
+      close()
+    }
+  }
+
+  function toggle() {
+    opened ? close() : open()
+  }
+
+  function open() {
+    opened = true
+
+    $el.addClass('-opened')
+    $form.stop(true, false).slideDown(500)
+    $inner
+      .stop(true, false)
+      .delay(200)
+      .animate({ opacity: 1 }, 700, function() {
+        focus()
+      })
+  }
+
+  function close() {
+    opened = false
+
+    focusToggleButton()
+    $el.removeClass('-opened')
+    $inner.stop(true, false).animate({ opacity: 0 }, 700)
+    $form
+      .stop(true, false)
+      .delay(200)
+      .slideUp(600)
+  }
+
+  function focus() {
+    $input.focus()
+  }
+
+  function focusToggleButton() {
+    $toggleButton.focus()
+  }
+
+  return {
+    toggle: toggle,
+    open: open,
+    close: close,
+    focus: focus
+  }
+}
+
+module.exports = createHeaderSearch
 
 },{}],"js-cookie":[function(require,module,exports){
 /*!

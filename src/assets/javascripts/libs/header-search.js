@@ -1,4 +1,4 @@
-function createHeaderSearch(el) {
+function create(el) {
   var $el = $(el)
   var $toggleButton = $el.find('.HeaderSearch__toggle')
   var $form = $el.find('.HeaderSearch__form')
@@ -71,4 +71,4 @@ function createHeaderSearch(el) {
   }
 }
 
-module.exports = createHeaderSearch
+module.exports.create = create

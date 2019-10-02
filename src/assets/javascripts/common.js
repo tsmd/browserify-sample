@@ -1,8 +1,8 @@
 'use strict'
 
-var createHeaderSearch = require('./libs/header-search')
+var headerSearch = require('./libs/header-search')
 $('.HeaderSearch').each(function () {
-  createHeaderSearch(this)
+  headerSearch.create(this)
 })
 
 $('body').append('<p>common.js!</p>')

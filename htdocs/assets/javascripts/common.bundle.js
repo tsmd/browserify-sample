@@ -45,10 +45,14 @@ function create(el) {
     opened = true
 
     $el.addClass('-opened')
+    // コンテナ ($form) の slideDown から一瞬遅れて
+    // 内容物をフェードインする。演出的な要求
     $form.stop(true, false).slideDown(500)
     $inner
       .stop(true, false)
       .delay(200)
+      // fadeIn/Out ではなく animate を使う。
+      // そうでないとコンテナの高さ計測がうまくいかず、思うようにアニメーションしない。
       .animate({ opacity: 1 }, 700, function() {
         focus()
       })
@@ -59,6 +63,8 @@ function create(el) {
 
     focusToggleButton()
     $el.removeClass('-opened')
+    // 内容物 ($inner) のフェードアウトから一瞬遅れて
+    // コンテナを折りたたむ。演出的な要求
     $inner.stop(true, false).animate({ opacity: 0 }, 700)
     $form
       .stop(true, false)
